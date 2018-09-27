@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">RestfulWebserviceIntergrationRefactorRefactoring</string>
+    <string name="app_name">MyToDo</string>
     <string name="sign_up">sign up</string>
     <string name="sign_in">sign in</string>
+    <string name="mytodo">MyToDo</string>
 </resources>

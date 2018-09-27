@@ -1,12 +1,17 @@
 package com.duyhoang.restfulwebserviceintergrationRetrofitRefactoring.ui.activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +37,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     EditText etToDo, etPlace, etToDoID, etModifiedToDoContent;
     Button btnAdd, btnDelete, btnUpdate;
     TextView txtToDoList;
+    NestedScrollView nsvToDoList;
 
 
     List<ToDoItem> todoList;
@@ -52,6 +58,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void initUI() {
+
+        getSupportActionBar().setIcon(R.drawable.ic_event_note_white_24dp);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         etToDo = findViewById(R.id.edit_home_activity_todocontent);
         etPlace = findViewById(R.id.edit_home_activity_place);
         btnAdd = findViewById(R.id.button_home_activity_add);
@@ -60,10 +70,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         btnDelete = findViewById(R.id.button_home_activity_delete);
         etModifiedToDoContent = findViewById(R.id.edit_home_activity_modified_todocontent);
         btnUpdate = findViewById(R.id.button_home_activity_update);
+        nsvToDoList = findViewById(R.id.nestedscrollView_todo_list);
 
         btnAdd.setOnClickListener(this);
         btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
+
     }
 
 
@@ -98,7 +110,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void logout() {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, LoginActivity.class));
         AppConfig.clearSharedPreference();
     }
 
@@ -262,7 +274,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 break;
             }
         }
-
         updateToDoList();
         clearAllTextInput();
     }
@@ -270,24 +281,25 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private void updateToDoList() {
         txtToDoList.setText("");
         for(ToDoItem item : todoList){
-            String line = item.getId() + ", " + item.getTodoString() + ", " + item.getPlace() + "\n";
+            String line = item.getId() + " - " +item.getTodoString() + ", " + item.getPlace() + "\n\n";
             txtToDoList.append(line);
+            scrollDownToDoList();
         }
     }
-
 
     public void setToDoList(final List<ToDoItem> list) {
         for(ToDoItem item : list) {
             todoList.add(item);
-            String line = item.getId() + ", " + item.getTodoString() + ", " + item.getPlace() + "\n";
+            String line = item.getId() + " - " + item.getTodoString() + ", " + item.getPlace() + "\n\n";
             txtToDoList.append(line);
         }
     }
 
     private void addNewToDoItem2ToDoList(ToDoItem toDo) {
         todoList.add(toDo);
-        String line = toDo.getId() + ", " + toDo.getTodoString() + ", " + toDo.getPlace() + "\n";
+        String line = toDo.getId() + " - " + toDo.getTodoString() + ", " + toDo.getPlace() + "\n";
         txtToDoList.append(line);
+        scrollDownToDoList();
         clearAllTextInput();
     }
 
@@ -298,6 +310,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         etToDoID.setText("");
     }
 
+    private void scrollDownToDoList() {
+        nsvToDoList.fullScroll(View.FOCUS_DOWN);
+    }
 
 
 

@@ -112,10 +112,11 @@ public class RegisterDialogFrag extends DialogFragment implements View.OnClickLi
 
     }
 
-    private void signUp() throws Exception{
+    private void signUp() {
         String authorName = etUsername.getText().toString();
         final String authorPw = etPassword.getText().toString();
         String authorMail = etMailID.getText().toString();
+
         author = new Author(0, authorName, authorMail, authorPw);
         if(Util.isAppOnline(contextReference.get())){
             progressBar.setVisibility(View.VISIBLE);
@@ -125,14 +126,16 @@ public class RegisterDialogFrag extends DialogFragment implements View.OnClickLi
                 public void onResponse(Call<Author> call, Response<Author> response) {
                     progressBar.setVisibility(View.INVISIBLE);
                     toastMessage("Register successful");
-                    registerListener.onRegisterSuccess(response.body());
+                    if(registerListener != null)
+                        registerListener.onRegisterSuccess(response.body());
                     dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<Author> call, Throwable t) {
                     progressBar.setVisibility(View.INVISIBLE);
-                    registerListener.onRegisterFailure(t.getMessage());
+                    if(registerListener != null)
+                        registerListener.onRegisterFailure(t.getMessage());
                     dismiss();
                 }
             });

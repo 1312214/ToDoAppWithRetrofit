@@ -5,7 +5,6 @@
     <item
         android:id="@+id/option_logout"
         android:title="Log out"
-        android:icon="@drawable/ic_local_cafe_black_24dp"
-        app:showAsAction="withText|ifRoom"/>
+        app:showAsAction="withText"/>
 
 </menu>

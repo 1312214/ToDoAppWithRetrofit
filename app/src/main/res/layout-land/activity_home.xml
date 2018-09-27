@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/scrollView_parent">
 
     <LinearLayout
         android:orientation="vertical"
@@ -10,6 +11,7 @@
         android:padding="7dp"
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true">
+
         <EditText
             android:id="@+id/edit_home_activity_todocontent"
             android:hint="Todo content"
@@ -36,23 +38,25 @@
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/nestedscrollView_todo_list"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:layout_marginTop="5dp"
             android:background="@color/light_blue_A200">
+
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/text_home_activity_todolist"
-                    android:textColor="@android:color/white"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="30dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="30dp"
-                    android:layout_marginBottom="30dp"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@android:color/white" />
             </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>
@@ -98,8 +102,5 @@
                 android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>
-
-
-
 
 </ScrollView>

@@ -3,6 +3,7 @@ package com.duyhoang.restfulwebserviceintergrationRetrofitRefactoring.ui.activit
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.duyhoang.restfulwebserviceintergrationRetrofitRefactoring.AppConfig;
-import com.duyhoang.restfulwebserviceintergrationRetrofitRefactoring.BuildConfig;
 import com.duyhoang.restfulwebserviceintergrationRetrofitRefactoring.R;
 import com.duyhoang.restfulwebserviceintergrationRetrofitRefactoring.network.APIServiceProvider;
 import com.duyhoang.restfulwebserviceintergrationRetrofitRefactoring.restbean.Author;
@@ -23,13 +23,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends BaseActivity implements RegisterDialogFrag.RegisterListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener{
-
-
+public class LoginActivity extends BaseActivity implements RegisterDialogFrag.RegisterListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener{
 
     Button btnLogin;
     EditText etUsername;
     EditText etPassword;
+    EditText etEmail;
     TextView txtRegister;
     Switch aSwitch;
 
@@ -37,7 +36,7 @@ public class MainActivity extends BaseActivity implements RegisterDialogFrag.Reg
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         initUI();
 
@@ -50,6 +49,8 @@ public class MainActivity extends BaseActivity implements RegisterDialogFrag.Reg
 
         if(AppConfig.getRegisteredSuccessfulAuthor() != null){
             etUsername.setText(AppConfig.getRegisteredSuccessfulAuthor().getAuthorName());
+            etEmail.setText(AppConfig.getRegisteredSuccessfulAuthor().getAuthorEmailId());
+            etPassword.setText(AppConfig.getRegisteredSuccessfulAuthor().getAuthorPassword());
         }
 
         //BE CAREFULL WITH BUILDCONIGG.DEBUG WHEN BUILDING FOR RELEASE VERSON.
@@ -59,8 +60,11 @@ public class MainActivity extends BaseActivity implements RegisterDialogFrag.Reg
     }
 
     private void initUI() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         etUsername = findViewById(R.id.edit_user_name);
         etPassword = findViewById(R.id.edit_password);
+        etEmail = findViewById(R.id.edit_email);
         btnLogin = findViewById(R.id.button_sign_in);
         txtRegister = findViewById(R.id.text_register);
         aSwitch = findViewById(R.id.switch_mode);
@@ -73,8 +77,8 @@ public class MainActivity extends BaseActivity implements RegisterDialogFrag.Reg
 
     @Override
     public void onRegisterSuccess(Author author) {
-        AppConfig.saveRegisteredSuccessfulAuthor(new GsonBuilder().create().toJson(author));
-        AppConfig.saveUsername(author.getAuthorName());
+//        AppConfig.saveRegisteredSuccessfulAuthor(new GsonBuilder().create().toJson(author));
+//        AppConfig.saveUsername(author.getAuthorName());
     }
 
     @Override
@@ -126,16 +130,25 @@ public class MainActivity extends BaseActivity implements RegisterDialogFrag.Reg
         showBusyDialog("Logging");
         if(isValidAccount()){
             String password = etPassword.getText().toString();
-            Author user = AppConfig.getRegisteredSuccessfulAuthor();
-            user.setAuthorPassword(password);
+            String username = etUsername.getText().toString();
+            String email = etEmail.getText().toString();
+            final Author user = new Author(0, username,email, password);
 
             Call<TokenID> tokenIDCall = APIServiceProvider.getAPIServiceProvider().loginAuthor(user);
             tokenIDCall.enqueue(new Callback<TokenID>() {
                 @Override
                 public void onResponse(Call<TokenID> call, Response<TokenID> response) {
-                    AppConfig.saveSessionTokenID(response.body().getToken());
-                    dismissBusyDialog();
-                    goToHomeActivity();
+                    if(response.code() == 201) {
+                        AppConfig.saveSessionTokenID(response.body().getToken());
+                        AppConfig.saveRegisteredSuccessfulAuthor(new GsonBuilder().create().toJson(user));
+                        dismissBusyDialog();
+                        goToHomeActivity();
+                        finish();
+                    } else {
+                        dismissBusyDialog();
+                        toastMessage(response.message(), Toast.LENGTH_SHORT);
+                    }
+
                 }
 
                 @Override

@@ -2,26 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:padding="20dp">
 
     <EditText
         android:id="@+id/edit_register_dialog_username"
         android:inputType="text"
-        android:hint="username"
+        android:hint="Username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/edit_register_dialog_password"
-        android:inputType="text"
-        android:hint="password"
+        android:inputType="textPassword"
+        android:hint="Password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/edit_register_mailID"
         android:inputType="textEmailAddress"
-        android:hint="email"
+        android:hint="Email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <ProgressBar
@@ -39,12 +39,17 @@
             android:text="ok"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@color/blue_700"
+            android:textColor="@color/white"/>
         <Button
             android:id="@+id/button_register_cancel"
             android:text="cancel"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@color/blue_700"
+            android:textColor="@color/white"/>
     </LinearLayout>
 </LinearLayout>
