@@ -39,23 +39,16 @@ public class LoginActivity extends BaseActivity implements RegisterDialogFrag.Re
         setContentView(R.layout.activity_login);
 
         initUI();
-
         if(AppConfig.getServerEndPointPreference())
             aSwitch.setChecked(true);
         else
             aSwitch.setChecked(false);
-        aSwitch.setTextOff("Localhost");
-        aSwitch.setTextOn("Remote");
 
         if(AppConfig.getRegisteredSuccessfulAuthor() != null){
             etUsername.setText(AppConfig.getRegisteredSuccessfulAuthor().getAuthorName());
             etEmail.setText(AppConfig.getRegisteredSuccessfulAuthor().getAuthorEmailId());
             etPassword.setText(AppConfig.getRegisteredSuccessfulAuthor().getAuthorPassword());
         }
-
-        //BE CAREFULL WITH BUILDCONIGG.DEBUG WHEN BUILDING FOR RELEASE VERSON.
-//        if(BuildConfig.DEBUG)
-//            etPassword.setText("ha");
 
     }
 

@@ -37,7 +37,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     EditText etToDo, etPlace, etToDoID, etModifiedToDoContent;
     Button btnAdd, btnDelete, btnUpdate;
     TextView txtToDoList;
-    NestedScrollView nsvToDoList;
+    ScrollView svParent, svToDoList;
 
 
     List<ToDoItem> todoList;
@@ -70,11 +70,27 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         btnDelete = findViewById(R.id.button_home_activity_delete);
         etModifiedToDoContent = findViewById(R.id.edit_home_activity_modified_todocontent);
         btnUpdate = findViewById(R.id.button_home_activity_update);
-        nsvToDoList = findViewById(R.id.nestedscrollView_todo_list);
+        svParent = findViewById(R.id.scrollView_parent);
+        svToDoList = findViewById(R.id.scrollView_children);
 
         btnAdd.setOnClickListener(this);
         btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
+        svParent.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                findViewById(R.id.scrollView_children).getParent().requestDisallowInterceptTouchEvent(false);
+                return false;
+            }
+        });
+
+        svToDoList.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
 
     }
 
@@ -105,8 +121,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         switch (item.getItemId()){
             case R.id.option_logout: logout();
                 return true;
+                default:
+                    return super.onOptionsItemSelected(item);
         }
-        return false;
+
     }
 
     private void logout() {
@@ -311,7 +329,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void scrollDownToDoList() {
-        nsvToDoList.fullScroll(View.FOCUS_DOWN);
+        svToDoList.fullScroll(View.FOCUS_DOWN);
     }
 
 
